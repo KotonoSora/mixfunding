@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'api.dart';
+
+import 'model/pokemons.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -115,22 +119,27 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class TestList extends StatelessWidget {
-  @override 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: 10,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                  height: 50,
-                  color: Colors.amber[600],
-                  child: Center(
-                      child: Text('entry ${index}'),
-                  ),
-              );
-            }
-        ),
+      body: SafeArea(
+        child: FutureBuilder(
+            future: new API().getAllPokemon(),
+            builder: (BuildContext context, AsyncSnapshot<Pokemons> snapshot) {
+              if (snapshot.hasData) {
+                Pokemons? pokemons = snapshot.data;
+                return ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: pokemons?.results.length ?? 0,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        child: Text('${pokemons?.results[index].name}'),
+                      );
+                    },);
+              }
+              return Text('waiting');
+            },),
+      ),
     );
   }
 }
