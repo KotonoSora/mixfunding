@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: TestList(),
     );
   }
 }
@@ -110,6 +110,27 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class TestList extends StatelessWidget {
+  @override 
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: 10,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                  height: 50,
+                  color: Colors.amber[600],
+                  child: Center(
+                      child: Text('entry ${index}'),
+                  ),
+              );
+            }
+        ),
     );
   }
 }
