@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:mixfunding/model/berry.dart';
+import 'package:mixfunding/model/named_api_resource.dart';
 import 'package:mixfunding/api.dart';
+import 'package:mixfunding/widget/berry.dart';
 
 class BerriesList extends StatefulWidget {
   const BerriesList({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _BerriesListState extends State<BerriesList> {
   bool _isFirstLoadRunning = false;
   bool _isLoadMoreRunning = false;
 
-  List<Berry> _berries = [];
+  List<NamedAPIResource> _berries = [];
 
   void _firstLoad() {
     setState(() {
@@ -102,6 +103,14 @@ class _BerriesListState extends State<BerriesList> {
                       child: ListTile(
                         title: Text(_berries[index].name),
                         subtitle: Text(_berries[index].url),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BerryDetail(
+                              berry: _berries[index],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),

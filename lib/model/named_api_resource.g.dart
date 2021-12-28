@@ -1,17 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'pokemon.dart';
+part of 'named_api_resource.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Pokemon _$PokemonFromJson(Map<String, dynamic> json) => Pokemon(
+NamedAPIResource _$NamedAPIResourceFromJson(Map<String, dynamic> json) =>
+    NamedAPIResource(
       json['name'] as String,
       json['url'] as String,
     );
 
-Map<String, dynamic> _$PokemonToJson(Pokemon instance) => <String, dynamic>{
+Map<String, dynamic> _$NamedAPIResourceToJson(NamedAPIResource instance) =>
+    <String, dynamic>{
       'name': instance.name,
       'url': instance.url,
     };
