@@ -39,7 +39,7 @@ class _BerriesListState extends State<BerriesList> {
     if (_isLoadMoreRunning == true) return;
     if (_hasNextPage == true &&
         _isFirstLoadRunning == false &&
-        _controller.position.extentAfter < 300) {
+        _controller.position.extentAfter < 1000) {
       setState(() {
         _isLoadMoreRunning = true;
       });
@@ -55,13 +55,13 @@ class _BerriesListState extends State<BerriesList> {
               _hasNextPage = false;
             });
           }
+        }).then((res) {
+          setState(() {
+            _isLoadMoreRunning = false;
+          });
         });
       }
     }
-
-    setState(() {
-      _isLoadMoreRunning = false;
-    });
   }
 
   late ScrollController _controller;

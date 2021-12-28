@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:mixfunding/model/named_api_resource.dart';
-import 'package:mixfunding/model/flavors.dart';
+import 'package:mixfunding/model/flavor.dart';
 
 part 'berry.g.dart';
 
@@ -31,7 +31,7 @@ class Berry {
   int smoothness;
   int soil_dryness;
   NamedAPIResource firmness;
-  List<Flavors> flavors;
+  List<Flavor> flavors;
   NamedAPIResource item;
   NamedAPIResource natural_gift_type;
 

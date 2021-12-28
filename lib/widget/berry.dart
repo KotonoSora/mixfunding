@@ -3,6 +3,7 @@ import 'package:mixfunding/api.dart';
 
 import 'package:mixfunding/model/named_api_resource.dart';
 import 'package:mixfunding/model/berry.dart';
+import 'package:mixfunding/model/flavor.dart';
 
 class BerryDetail extends StatefulWidget {
   const BerryDetail({Key? key, required this.berry}) : super(key: key);
@@ -25,10 +26,8 @@ class _BerryDetailState extends State<BerryDetail> {
     getBerryDetail(widget.berry.url).then((res) {
       setState(() {
         _berry = res;
+        _isFirstLoadRunning = false;
       });
-    });
-    setState(() {
-      _isFirstLoadRunning = false;
     });
   }
 
@@ -50,7 +49,20 @@ class _BerryDetailState extends State<BerryDetail> {
             )
           : Column(
               children: [
-                Text(_berry?.toJson().toString() ?? ''),
+                Text('loading: $_isFirstLoadRunning'),
+                Text('Name: ${_berry?.name}'),
+                Text('Growth time: ${_berry?.growth_time}h/stage'),
+                Text('Max harvest: ${_berry?.max_harvest}berry/tree'),
+                Text('Smoothness: ${_berry?.smoothness}'),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _berry?.flavors.length ?? 0,
+                    itemBuilder: (_, int index) {
+                      Flavor itemFlavor = _berry!.flavors[index];
+                      return Text(itemFlavor.flavor.name);
+                    },
+                  ),
+                ),
               ],
             ),
     );

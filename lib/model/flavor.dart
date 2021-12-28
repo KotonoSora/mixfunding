@@ -2,11 +2,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:mixfunding/model/named_api_resource.dart';
 
-part 'flavors.g.dart';
+part 'flavor.g.dart';
 
 @JsonSerializable()
-class Flavors {
-  Flavors(
+class Flavor {
+  Flavor(
     this.potency,
     this.flavor,
   );
@@ -14,8 +14,7 @@ class Flavors {
   int potency;
   NamedAPIResource flavor;
 
-  factory Flavors.fromJson(Map<String, dynamic> json) =>
-      _$FlavorsFromJson(json);
+  factory Flavor.fromJson(Map<String, dynamic> json) => _$FlavorFromJson(json);
 
-  Map<String, dynamic> toJson() => _$FlavorsToJson(this);
+  Map<String, dynamic> toJson() => _$FlavorToJson(this);
 }

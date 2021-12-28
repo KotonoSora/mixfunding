@@ -1,17 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'flavors.dart';
+part of 'flavor.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Flavors _$FlavorsFromJson(Map<String, dynamic> json) => Flavors(
+Flavor _$FlavorFromJson(Map<String, dynamic> json) => Flavor(
       json['potency'] as int,
       NamedAPIResource.fromJson(json['flavor'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$FlavorsToJson(Flavors instance) => <String, dynamic>{
+Map<String, dynamic> _$FlavorToJson(Flavor instance) => <String, dynamic>{
       'potency': instance.potency,
       'flavor': instance.flavor,
     };

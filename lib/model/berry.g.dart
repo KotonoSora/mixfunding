@@ -17,7 +17,7 @@ Berry _$BerryFromJson(Map<String, dynamic> json) => Berry(
       json['soil_dryness'] as int,
       NamedAPIResource.fromJson(json['firmness'] as Map<String, dynamic>),
       (json['flavors'] as List<dynamic>)
-          .map((e) => Flavors.fromJson(e as Map<String, dynamic>))
+          .map((e) => Flavor.fromJson(e as Map<String, dynamic>))
           .toList(),
       NamedAPIResource.fromJson(json['item'] as Map<String, dynamic>),
       NamedAPIResource.fromJson(
