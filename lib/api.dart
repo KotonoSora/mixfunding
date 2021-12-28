@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import 'model/pokemons.dart';
-import 'model/berries.dart';
+import 'package:mixfunding/model/pokemons.dart';
+import 'package:mixfunding/model/berries.dart';
 
-final String pokeApiv2 = 'https://pokeapi.co/api/v2/';
-final String allPokemons = '${pokeApiv2}/pokemon';
-final String allBerries = '${pokeApiv2}/berry';
+const String pokeApiv2 = 'https://pokeapi.co/api/v2';
+const String allPokemons = '$pokeApiv2/pokemon';
+const String allBerries = '$pokeApiv2/berry';
 
 class API {
   Future<Pokemons> getAllPokemon() {
@@ -21,4 +21,9 @@ class API {
     return http.get(url).then((response) =>
         Berries.fromJson(jsonDecode(response.body) as Map<String, dynamic>));
   }
+}
+
+Future<Berries> getBerries(String url) {
+  return http.get(Uri.parse(url)).then(
+      (res) => Berries.fromJson(jsonDecode(res.body) as Map<String, dynamic>));
 }
