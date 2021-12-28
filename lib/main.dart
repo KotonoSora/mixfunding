@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'api.dart';
 
 import 'model/pokemons.dart';
+import 'model/berries.dart';
 
 void main() {
   runApp(const MyApp());
@@ -124,21 +125,23 @@ class TestList extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder(
-            future: new API().getAllPokemon(),
-            builder: (BuildContext context, AsyncSnapshot<Pokemons> snapshot) {
-              if (snapshot.hasData) {
-                Pokemons? pokemons = snapshot.data;
-                return ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: pokemons?.results.length ?? 0,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        child: Text('${pokemons?.results[index].name}'),
-                      );
-                    },);
-              }
-              return Text('waiting');
-            },),
+          future: new API().getAllBerry(),
+          builder: (BuildContext context, AsyncSnapshot<Berries> snapshot) {
+            if (snapshot.hasData) {
+              Berries? berries = snapshot.data;
+              return ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: berries?.results.length ?? 0,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    child: Text('${berries?.results[index].name}'),
+                  );
+                },
+              );
+            }
+            return Text('waiting');
+          },
+        ),
       ),
     );
   }
