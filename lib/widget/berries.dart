@@ -36,10 +36,18 @@ class _BerriesListState extends State<BerriesList> {
   }
 
   void _loadMore() {
-    if (_isLoadMoreRunning == true) return;
+    if (_nextUrl.isEmpty) {
+      setState(() {
+        _isLoadMoreRunning = false;
+      });
+      return;
+    }
     if (_hasNextPage == true &&
         _isFirstLoadRunning == false &&
-        _controller.position.extentAfter < 1000) {
+        _isLoadMoreRunning == false &&
+        _nextUrl.isNotEmpty &&
+        _controller.position.extentAfter < 500) {
+      print("loadmore: $_nextUrl");
       setState(() {
         _isLoadMoreRunning = true;
       });
@@ -55,7 +63,6 @@ class _BerriesListState extends State<BerriesList> {
               _hasNextPage = false;
             });
           }
-        }).then((res) {
           setState(() {
             _isLoadMoreRunning = false;
           });
