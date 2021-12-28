@@ -24,14 +24,12 @@ class _BerriesListState extends State<BerriesList> {
     setState(() {
       _isFirstLoadRunning = true;
     });
-    getBerries(allBerries).then((res) {
+    getNamedResourceList(allBerries).then((res) {
       setState(() {
         _berries = res.results;
         _nextUrl = res.next ?? '';
+        _isFirstLoadRunning = false;
       });
-    });
-    setState(() {
-      _isFirstLoadRunning = false;
     });
   }
 
@@ -52,7 +50,7 @@ class _BerriesListState extends State<BerriesList> {
         _isLoadMoreRunning = true;
       });
       if (_nextUrl.isNotEmpty) {
-        getBerries(_nextUrl).then((res) {
+        getNamedResourceList(_nextUrl).then((res) {
           if (res.results.isNotEmpty) {
             setState(() {
               _berries.addAll(res.results);
