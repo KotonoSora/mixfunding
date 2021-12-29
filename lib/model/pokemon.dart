@@ -39,18 +39,18 @@ class Pokemon {
   String name;
   int base_experience;
   int height;
-  int is_default;
+  bool is_default;
   int order;
   int weight;
-  PokemonAbility abilities;
+  List<PokemonAbility> abilities;
   List<NamedAPIResource> forms;
-  VersionGameIndex game_indices;
-  PokemonHeldItem held_items;
+  List<VersionGameIndex> game_indices;
+  List<PokemonHeldItem> held_items;
   String location_area_encounters;
   List<PokemonMove> moves;
   List<PokemonTypePast> past_types;
   PokemonSprites sprites;
-  List<NamedAPIResource> species;
+  NamedAPIResource species;
   List<PokemonStat> stats;
   List<PokemonType> types;
 

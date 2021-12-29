@@ -13,7 +13,7 @@ class PokemonHeldItem {
   );
 
   NamedAPIResource item;
-  PokemonHeldItemVersion version_details;
+  List<PokemonHeldItemVersion> version_details;
 
   factory PokemonHeldItem.fromJson(Map<String, dynamic> json) =>
       _$PokemonHeldItemFromJson(json);

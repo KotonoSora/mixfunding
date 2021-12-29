@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mixfunding/widget/berries.dart';
+import 'package:mixfunding/widget/pokemons.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const BerriesList(),
+      home: const PokemonsList(),
     );
   }
 }

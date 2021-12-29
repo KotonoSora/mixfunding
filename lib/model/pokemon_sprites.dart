@@ -15,14 +15,14 @@ class PokemonSprites {
     this.back_shiny_female,
   );
 
-  String front_default;
-  String front_shiny;
-  String front_female;
-  String front_shiny_female;
-  String back_default;
-  String back_shiny;
-  String back_female;
-  String back_shiny_female;
+  String? front_default;
+  String? front_shiny;
+  String? front_female;
+  String? front_shiny_female;
+  String? back_default;
+  String? back_shiny;
+  String? back_female;
+  String? back_shiny_female;
 
   factory PokemonSprites.fromJson(Map<String, dynamic> json) =>
       _$PokemonSpritesFromJson(json);

@@ -59,7 +59,9 @@ class _BerryDetailState extends State<BerryDetail> {
                     itemCount: _berry?.flavors.length ?? 0,
                     itemBuilder: (_, int index) {
                       Flavor itemFlavor = _berry!.flavors[index];
-                      return Text(itemFlavor.flavor.name);
+                      return ListTile(
+                        title: Text(itemFlavor.flavor.name),
+                      );
                     },
                   ),
                 ),

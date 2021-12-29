@@ -1,5 +1,10 @@
 # Change log
 
+### 29-12-2021
+- [x] make screen list pokemon
+- [x] make screen pokemon detail
+- [ ] setup cache storage for data fetch
+
 ### 28-12-2021
 - [ ] make api crawler poke api
 - [ ] make screen search pokemon
