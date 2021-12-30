@@ -1,5 +1,9 @@
 # Change log
 
+### 30-12-2021
+- [x] make screen search pokemon
+- [ ] make screen search berry
+
 ### 29-12-2021
 - [x] make screen list pokemon
 - [x] make screen pokemon detail

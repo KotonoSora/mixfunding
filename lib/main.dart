@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:mixfunding/widget/berries.dart';
 import 'package:mixfunding/widget/pokemons.dart';
+import 'package:mixfunding/widget/search_pokemon.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const PokemonsList(),
+      home: const SearchPokemon(),
     );
   }
 }
