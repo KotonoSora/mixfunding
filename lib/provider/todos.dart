@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mixfunding/model/todo/todo_item.dart';
 
 class TodosProvider extends ChangeNotifier {
-  List<TodoItem> _todos = [
+  final List<TodoItem> _todos = [
     TodoItem.fromJson({
       "title": "first todo",
       "description": "description todo",

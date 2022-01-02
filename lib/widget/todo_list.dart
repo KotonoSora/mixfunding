@@ -5,6 +5,8 @@ import 'package:mixfunding/model/todo/todo_item.dart';
 import 'package:mixfunding/provider/todos.dart';
 
 class TodoList extends StatelessWidget {
+  const TodoList({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TodosProvider>(context);
