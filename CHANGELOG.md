@@ -1,5 +1,11 @@
 # Change log
 
+### 02-01-2022
+- [x] make simple tool todo
+
+### 01-01-2022
+- [ ] make simple tool todo
+
 ### 30-12-2021
 - [x] make screen search pokemon
 - [ ] make screen search berry
