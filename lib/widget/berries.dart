@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mixfunding/model/named_api_resource.dart';
 import 'package:mixfunding/api.dart';
 import 'package:mixfunding/widget/berry.dart';
+import 'package:mixfunding/pub/infinite_list.dart';
 
 class BerriesList extends StatefulWidget {
   const BerriesList({Key? key}) : super(key: key);
@@ -12,136 +13,70 @@ class BerriesList extends StatefulWidget {
 }
 
 class _BerriesListState extends State<BerriesList> {
-  String _nextUrl = '';
-
-  bool _hasNextPage = true;
-  bool _isFirstLoadRunning = false;
-  bool _isLoadMoreRunning = false;
-
-  List<NamedAPIResource> _berries = [];
-
-  void _firstLoad() {
-    setState(() {
-      _isFirstLoadRunning = true;
-    });
-    getNamedResourceList(allBerries).then((res) {
-      setState(() {
-        _berries = res.results;
-        _nextUrl = res.next ?? '';
-        _isFirstLoadRunning = false;
-      });
-    });
-  }
-
-  void _loadMore() {
-    if (_nextUrl.isEmpty) {
-      setState(() {
-        _isLoadMoreRunning = false;
-      });
-      return;
-    }
-    if (_hasNextPage == true &&
-        _isFirstLoadRunning == false &&
-        _isLoadMoreRunning == false &&
-        _nextUrl.isNotEmpty &&
-        _controller.position.extentAfter < 500) {
-      setState(() {
-        _isLoadMoreRunning = true;
-      });
-      if (_nextUrl.isNotEmpty) {
-        getNamedResourceList(_nextUrl).then((res) {
-          if (res.results.isNotEmpty) {
-            setState(() {
-              _berries.addAll(res.results);
-              _nextUrl = res.next ?? '';
-            });
-          } else {
-            setState(() {
-              _hasNextPage = false;
-            });
-          }
-          setState(() {
-            _isLoadMoreRunning = false;
-          });
-        });
-      }
-    }
-  }
-
-  late ScrollController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _firstLoad();
-    _controller = ScrollController()..addListener(_loadMore);
-  }
-
-  @override
-  void dispose() {
-    _controller.removeListener(_loadMore);
-    super.dispose();
-  }
+  String? _nextUrl = allBerries;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Berries List'),
+        title: Text("Berries"),
       ),
-      body: _isFirstLoadRunning
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    controller: _controller,
-                    itemCount: _berries.length,
-                    itemBuilder: (_, int index) => Card(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 10,
-                      ),
-                      child: ListTile(
-                        title: Text(_berries[index].name),
-                        subtitle: Text(_berries[index].url),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BerryDetail(
-                              berry: _berries[index],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+      body: InfiniteList<NamedAPIResource>(
+        builder: (BuildContext context, List<NamedAPIResource> items,
+                ScrollController scrollController) =>
+            ListView.builder(
+          controller: scrollController,
+          itemCount: items.length,
+          itemBuilder: (_, int index) => Card(
+            margin: const EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: 10,
+            ),
+            child: ListTile(
+              title: Text(items[index].name),
+              subtitle: Text(items[index].url),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BerryDetail(
+                    berry: items[index],
                   ),
                 ),
-                if (_isLoadMoreRunning == true)
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      top: 10,
-                      bottom: 40,
-                    ),
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                if (_hasNextPage == false)
-                  Container(
-                    padding: const EdgeInsets.only(
-                      top: 30,
-                      bottom: 40,
-                    ),
-                    color: Colors.amber,
-                    child: const Center(
-                      child: Text('fetched all berries'),
-                    ),
-                  ),
-              ],
+              ),
             ),
+          ),
+        ),
+        placeholderBuilder: (_) => SizedBox(),
+        onMoreItemsRequested: () {},
+        fetcher: () {
+          if (_nextUrl != null) {
+            return getNamedResourceList(_nextUrl!).then((res) {
+              setState(() {
+                _nextUrl = res.next;
+              });
+              return res.results;
+            });
+          }
+          return Future.delayed(Duration(seconds: 0), () => []);
+        },
+        moreItemsfetcher: () {
+          if (_nextUrl != null) {
+            return getNamedResourceList(_nextUrl!).then((res) {
+              setState(() {
+                _nextUrl = res.next;
+              });
+              return res.results;
+            });
+          }
+          return Future.delayed(Duration(seconds: 0), () => []);
+        },
+        footerBuilder: (context) => Padding(
+          padding: EdgeInsets.all(20),
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      ),
     );
   }
 }
