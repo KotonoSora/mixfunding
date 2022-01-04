@@ -13,6 +13,8 @@ class PokemonsList extends StatefulWidget {
 }
 
 class _PokemonsListState extends State<PokemonsList> {
+  String? _nextUrl = allPokemons;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +38,7 @@ class _PokemonsListState extends State<PokemonsList> {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PokemonDetail(
+                  builder: (_) => PokemonDetail(
                     pokemon: items[index],
                   ),
                 ),
@@ -46,10 +48,28 @@ class _PokemonsListState extends State<PokemonsList> {
         ),
         placeholderBuilder: (BuildContext context) => Container(),
         onMoreItemsRequested: () {},
-        fetcher: () =>
-            getNamedResourceList(allPokemons).then((res) => res.results),
-        moreItemsfetcher: () =>
-            getNamedResourceList(allPokemons).then((res) => res.results),
+        fetcher: () {
+          if (_nextUrl != null) {
+            return getNamedResourceList(_nextUrl!).then((res) {
+              setState(() {
+                _nextUrl = res.next!;
+              });
+              return res.results;
+            });
+          }
+          return Future.delayed(Duration(seconds: 0), () => []);
+        },
+        moreItemsfetcher: () {
+          if (_nextUrl != null) {
+            return getNamedResourceList(_nextUrl!).then((res) {
+              setState(() {
+                _nextUrl = res.next!;
+              });
+              return res.results;
+            });
+          }
+          return Future.delayed(Duration(seconds: 0), () => []);
+        },
         footerBuilder: (context) => Padding(
           padding: EdgeInsets.all(20),
           child: Center(
