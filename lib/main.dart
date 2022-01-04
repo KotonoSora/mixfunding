@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:mixfunding/widget/berries.dart';
 import 'package:mixfunding/widget/pokemons.dart';
+import 'package:mixfunding/widget/home.dart';
 // import 'package:mixfunding/widget/search_pokemon.dart';
 // import 'package:mixfunding/widget/todo.dart';
 import 'package:mixfunding/provider/todos.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const BerriesList(),
+        home: HomePage(),
       ),
     );
   }
