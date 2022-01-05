@@ -11,18 +11,19 @@ class SearchPokemon extends StatefulWidget {
 }
 
 class _SearchPokemonState extends State<SearchPokemon> {
-  late TextEditingController _controller;
   Pokemon? _pokemon;
   bool _isNotFound = false;
   bool _isSearchRunning = false;
+  final _formKey = GlobalKey<FormState>();
+  String _pokemonName = '';
 
-  void fetchPokemonDetail(String pokemonName) {
+  void fetchPokemonDetail() {
     setState(() {
       _isNotFound = false;
       _pokemon = null;
       _isSearchRunning = true;
     });
-    getPokemonDetail('$allPokemons/$pokemonName').then((res) {
+    getPokemonDetail('$allPokemons/$_pokemonName').then((res) {
       setState(() {
         _pokemon = res;
         _isSearchRunning = false;
@@ -36,48 +37,66 @@ class _SearchPokemonState extends State<SearchPokemon> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Search Pokemon'),
       ),
-      body: Column(
-        children: [
-          TextField(
-            controller: _controller,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Id or name',
-            ),
-            onSubmitted: fetchPokemonDetail,
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (_isSearchRunning == true)
+                const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              if (_isNotFound == true)
+                Center(
+                  child: Text('Not found pokemon'),
+                ),
+              if (_pokemon != null)
+                Expanded(
+                  child: Image.network('${_pokemon?.sprites.front_default}'),
+                ),
+              TextFormField(
+                maxLines: 1,
+                initialValue: _pokemonName,
+                onChanged: (String name) {
+                  setState(() {
+                    _pokemonName = name;
+                  });
+                },
+                validator: (String? name) {
+                  if (name == null) {
+                    return 'The name cannot be empty';
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Name',
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    final isValid = _formKey.currentState!.validate();
+                    if (!isValid) return;
+                    fetchPokemonDetail();
+                  },
+                  child: Text('Search'),
+                ),
+              ),
+            ],
           ),
-          if (_isSearchRunning == true)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
-          if (_isNotFound == true)
-            Center(
-              child: Text('Not found pokemon'),
-            ),
-          if (_pokemon != null)
-            Image.network('${_pokemon?.sprites.front_default}'),
-          if (_pokemon != null)
-            Center(
-              child: Text('Name: ${_pokemon?.name}'),
-            ),
-        ],
+        ),
       ),
     );
   }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:mixfunding/widget/berries.dart';
-import 'package:mixfunding/widget/pokemons.dart';
+// import 'package:mixfunding/widget/berries.dart';
+// import 'package:mixfunding/widget/pokemons.dart';
 import 'package:mixfunding/widget/home.dart';
 // import 'package:mixfunding/widget/search_pokemon.dart';
 // import 'package:mixfunding/widget/todo.dart';

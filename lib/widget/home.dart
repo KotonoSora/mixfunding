@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mixfunding/widget/pokemons.dart';
 import 'package:mixfunding/widget/berries.dart';
 import 'package:mixfunding/widget/todo.dart';
+import 'package:mixfunding/widget/search_pokemon.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class HomePage extends StatelessWidget {
         unselectedItemColor: Colors.white.withOpacity(0.7),
         selectedItemColor: Colors.white,
         currentIndex: 0,
+        type: BottomNavigationBarType.fixed,
         onTap: (int index) {
           switch (index) {
             case 1:
@@ -32,6 +34,13 @@ class HomePage extends StatelessWidget {
                 ),
               );
               break;
+            case 3:
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => SearchPokemon(),
+                ),
+              );
+              break;
           }
         },
         items: const [
@@ -40,12 +49,16 @@ class HomePage extends StatelessWidget {
             label: 'Pokemons',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.approval_rounded),
             label: 'Berries',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.fact_check_outlined),
             label: 'Todolist',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
           ),
         ],
       ),
