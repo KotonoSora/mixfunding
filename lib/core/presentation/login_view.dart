@@ -27,10 +27,9 @@ class _LoginView extends State<LoginView> {
     return keyboardDismiss(
       context: context,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
+        body: SafeArea(
+          child: page(context),
         ),
-        body: page(context),
         resizeToAvoidBottomInset: false,
       ),
     );
@@ -56,8 +55,20 @@ class _LoginView extends State<LoginView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Mixfunding'),
-          Text('Login'),
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            'Login with email',
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: Color.fromRGBO(51, 51, 51, 1),
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
           Form(
             key: _formKey,
             child: Column(
@@ -68,16 +79,60 @@ class _LoginView extends State<LoginView> {
               ],
             ),
           ),
+          SizedBox(
+            height: 10,
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: () {
+                //TODO: redirect to screen forgot password
+              },
+              child: Text(
+                'Forgot password?',
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size.fromHeight(50),
+            ),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                //	TODO action login
+                //TODO: action login
                 print(_controllerEmail.text);
                 print(_controllerPassword.text);
               }
             },
-            child: Text('Login'),
+            child: Text(
+              'Login',
+              style: TextStyle(
+                fontSize: 24,
+              ),
+            ),
           ),
+          Expanded(
+            child: Container(),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Don't have an account?"),
+              TextButton(
+                onPressed: () {
+                  //TODO: redirect to screen sign up
+                },
+                child: Text('Sign Up'),
+              ),
+            ],
+          )
         ],
       ),
     );
@@ -89,12 +144,15 @@ class _LoginView extends State<LoginView> {
       autofocus: false,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        hintText: 'Email',
-        labelText: 'Email *',
+        hintText: 'your-email@domain.com',
+        labelText: 'Email',
       ),
       validator: (String? value) {
         if (value == null || value.isEmpty) {
           return 'Please enter email';
+        }
+        if (!isEmail(value)) {
+          return 'Please enter a valid email address.';
         }
         return null;
       },
@@ -108,12 +166,13 @@ class _LoginView extends State<LoginView> {
       keyboardType: TextInputType.visiblePassword,
       obscureText: !_passwordVisible,
       decoration: InputDecoration(
-        hintText: 'password',
-        labelText: 'Password *',
+        hintText: '',
+        labelText: 'Password',
+        errorMaxLines: 5,
         suffixIcon: IconButton(
           icon: Icon(
-            _passwordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Theme.of(context).primaryColorDark,
+            !_passwordVisible ? Icons.visibility : Icons.visibility_off,
+            color: Colors.grey,
           ),
           onPressed: () {
             setState(() {
@@ -126,8 +185,29 @@ class _LoginView extends State<LoginView> {
         if (value == null || value.isEmpty) {
           return 'Please enter password';
         }
+        if (!isPassword(value)) {
+          return 'Your password is weak! Strong password required:'
+              '\n- at least 8 characters'
+              '\n- must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number'
+              '\n- Can contain special characters';
+        }
         return null;
       },
     );
+  }
+
+  bool isEmail(String value) {
+    // RegExp copy from https://regexr.com/2rhq7
+    String pattern =
+        r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
+    RegExp regExp = RegExp(pattern);
+    return regExp.hasMatch(value);
+  }
+
+  bool isPassword(String value) {
+    // RegExp copy from https://regexr.com/3bfsi
+    String pattern = r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$";
+    RegExp regExp = RegExp(pattern);
+    return regExp.hasMatch(value);
   }
 }
