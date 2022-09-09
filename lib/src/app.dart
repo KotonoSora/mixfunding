@@ -8,6 +8,9 @@ import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 import 'package:mixfunding/core/presentation/login_view.dart';
 
+// Import pub
+import 'package:bot_toast/bot_toast.dart';
+
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -81,6 +84,8 @@ class MyApp extends StatelessWidget {
               },
             );
           },
+          builder: BotToastInit(),
+          navigatorObservers: [BotToastNavigatorObserver()],
         );
       },
     );

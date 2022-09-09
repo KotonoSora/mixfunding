@@ -38,4 +38,94 @@ void main() {
       expect(btnLoginLabelWidget.data, 'Login');
     });
   });
+
+  group('end-to-end test botToast', () {
+    Future click(WidgetTester tester) async {
+      await tester.tap(find.byKey(ValueKey('btn_login')));
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('should warning input full email and password',
+        (WidgetTester widgetTester) async {
+      app.main();
+      await widgetTester.pumpAndSettle();
+
+      await click(widgetTester);
+
+      expect(find.text('Warning'), findsOneWidget);
+      expect(find.text('Please enter your full email and password'),
+          findsOneWidget);
+      await widgetTester.pumpAndSettle(const Duration(seconds: 3));
+      await widgetTester.pumpAndSettle();
+      expect(find.text('Warning'), findsNothing);
+      expect(
+          find.text('Please enter your full email and password'), findsNothing);
+    });
+
+    testWidgets('should warning email is invalid',
+        (WidgetTester widgetTester) async {
+      app.main();
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.enterText(
+          find.byKey(ValueKey('email_input')), 'email_test');
+      await widgetTester.enterText(
+          find.byKey(ValueKey('password_input')), 'password_test');
+
+      await click(widgetTester);
+
+      expect(find.text('Warning'), findsOneWidget);
+      expect(find.text('The email is invalid. Please enter again'),
+          findsOneWidget);
+      await widgetTester.pumpAndSettle(const Duration(seconds: 3));
+      await widgetTester.pumpAndSettle();
+      expect(find.text('Warning'), findsNothing);
+      expect(
+          find.text('Please enter your full email and password'), findsNothing);
+    });
+
+    testWidgets('should warning password is invalid',
+        (WidgetTester widgetTester) async {
+      app.main();
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.enterText(
+          find.byKey(ValueKey('email_input')), 'email@test.com');
+      await widgetTester.enterText(
+          find.byKey(ValueKey('password_input')), 'password_test');
+
+      await click(widgetTester);
+
+      String warning = 'The password must be 8 characters long,'
+          ' must contain at least 1 uppercase letter, 1 lowercase letter, 1 number,'
+          ' and must not contain spaces.'
+          ' Please enter again';
+      expect(find.text('Warning'), findsOneWidget);
+      expect(find.text(warning), findsOneWidget);
+      await widgetTester.pumpAndSettle(const Duration(seconds: 3));
+      await widgetTester.pumpAndSettle();
+      expect(find.text('Warning'), findsNothing);
+      expect(find.text(warning), findsNothing);
+    });
+
+    testWidgets('should not show any warning',
+        (WidgetTester widgetTester) async {
+      app.main();
+      await widgetTester.pumpAndSettle();
+
+      await widgetTester.enterText(
+          find.byKey(ValueKey('email_input')), 'email@test.com');
+      await widgetTester.enterText(
+          find.byKey(ValueKey('password_input')), 'Test123!');
+
+      await click(widgetTester);
+
+      expect(find.text('Warning'), findsNothing);
+      await widgetTester.pumpAndSettle(const Duration(seconds: 3));
+      await widgetTester.pumpAndSettle();
+      expect(find.text('Warning'), findsNothing);
+    });
+  });
 }

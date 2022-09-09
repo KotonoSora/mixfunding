@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// Import pub
+import 'package:bot_toast/bot_toast.dart';
+
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
@@ -199,10 +202,8 @@ class _LoginView extends State<LoginView> {
               ),
             ),
             onPressed: () {
-              if (_formKey.currentState!.validate()) {
+              if (isValidate()) {
                 //TODO: action login
-                print(_controllerEmail.text);
-                print(_controllerPassword.text);
               }
             },
             child: Text(
@@ -259,10 +260,9 @@ class _LoginView extends State<LoginView> {
               _emailClear = false;
             });
           },
-          maxLines: 1,
           decoration: InputDecoration(
             hintText: 'Input email',
-            contentPadding: EdgeInsets.only(left: 100),
+            contentPadding: EdgeInsets.zero,
             fillColor: Colors.white,
             filled: true,
             border: OutlineInputBorder(
@@ -290,15 +290,6 @@ class _LoginView extends State<LoginView> {
                   : SizedBox(),
             ),
           ),
-          validator: (String? value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter email';
-            }
-            if (!isEmail(value)) {
-              return 'Please enter a valid email address.';
-            }
-            return null;
-          },
         ),
       ],
     );
@@ -333,7 +324,6 @@ class _LoginView extends State<LoginView> {
           obscureText: !_passwordVisible,
           decoration: InputDecoration(
             hintText: 'Input password',
-            errorMaxLines: 5,
             contentPadding: EdgeInsets.zero,
             fillColor: Colors.white,
             filled: true,
@@ -357,18 +347,6 @@ class _LoginView extends State<LoginView> {
               },
             ),
           ),
-          validator: (String? value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter password';
-            }
-            if (!isPassword(value)) {
-              return 'Your password is weak! Strong password required:'
-                  '\n- at least 8 characters'
-                  '\n- must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number'
-                  '\n- Can contain special characters';
-            }
-            return null;
-          },
         ),
       ],
     );
@@ -384,8 +362,61 @@ class _LoginView extends State<LoginView> {
 
   bool isPassword(String value) {
     // RegExp copy from https://regexr.com/3bfsi
-    String pattern = r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$";
+    // RegExp must not contain spaces (?!.*\s)
+    String pattern =
+        r"^(?!.*\s)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$";
     RegExp regExp = RegExp(pattern);
     return regExp.hasMatch(value);
+  }
+
+  void showWarningToast({
+    required String title,
+    required String subtitle,
+  }) {
+    BotToast.showNotification(
+      title: (_) => Text(
+        key: Key('toast_title'),
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      subtitle: (_) => Text(
+        key: Key('toast_subtitle'),
+        subtitle,
+      ),
+      leading: (_) => Icon(
+        size: 40,
+        Icons.warning,
+        color: Colors.redAccent,
+      ),
+      onlyOne: true,
+      enableSlideOff: true,
+      backButtonBehavior: BackButtonBehavior.none,
+      duration: Duration(seconds: 3),
+    );
+  }
+
+  bool isValidate() {
+    print("isValid... email... ${_controllerEmail.text}");
+    print("isValid... password... ${_controllerPassword.text}");
+    //TODO: validator field and password
+    String title = 'Warning';
+    String warning = '';
+    if (_controllerEmail.text.isEmpty || _controllerPassword.text.isEmpty) {
+      warning = 'Please enter your full email and password';
+    } else if (!isEmail(_controllerEmail.text)) {
+      warning = 'The email is invalid. Please enter again';
+    } else if (!isPassword(_controllerPassword.text)) {
+      warning = 'The password must be 8 characters long,'
+          ' must contain at least 1 uppercase letter, 1 lowercase letter, 1 number,'
+          ' and must not contain spaces.'
+          ' Please enter again';
+    }
+    if (warning.isNotEmpty) {
+      showWarningToast(title: title, subtitle: warning);
+      return false;
+    }
+    return true;
   }
 }
